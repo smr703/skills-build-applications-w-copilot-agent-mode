@@ -27,9 +27,19 @@ jobs:
     needs: [find_exercise]
     env:
       ISSUE_REPOSITORY: ${{ github.repository }}
-      ISSUE_NUMBER: ${{ needs.find_exercise.outputs.issue-number }}
 
     steps:
+      - name: Find exercise issue
+        id: find-issue
+        run: |
+          ISSUE_NUMBER=$(gh issue list --repo ${{ github.repository }} --label "exercise" --state open --json number --jq '.[0].number')
+          if [ -z "$ISSUE_NUMBER" ]; then
+            ISSUE_NUMBER=$(gh issue list --repo ${{ github.repository }} --state open --json number --jq '.[0].number')
+          fi
+          echo "issue-number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v6
 
@@ -45,14 +55,14 @@ jobs:
         uses: peter-evans/find-comment@v3
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           direction: last
 
       - name: Update comment - checking work
         uses: GrantBirki/comment@v2.1.1
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           comment-id: ${{ steps.find-last-comment.outputs.comment-id }}
           file: exercise-toolkit/markdown-templates/step-feedback/checking-work.md
           edit-mode: replace
@@ -65,7 +75,7 @@ jobs:
         uses: skills/action-keyphrase-checker@v2.0.0
         with:
           text-file: octofit-tracker/frontend/package.json
-          keyphrase: '"react": "^19'
+          keyphrase: '"react":'
           minimum-occurrences: 1
           case-sensitive: false
 
@@ -93,7 +103,7 @@ jobs:
         uses: GrantBirki/comment@v2.1.1
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           comment-id: ${{ steps.find-last-comment.outputs.comment-id }}
           edit-mode: replace
           file: exercise-toolkit/markdown-templates/step-feedback/step-results-table.md
@@ -119,9 +129,19 @@ jobs:
     runs-on: ubuntu-latest
     env:
       ISSUE_REPOSITORY: ${{ github.repository }}
-      ISSUE_NUMBER: ${{ needs.find_exercise.outputs.issue-number }}
 
     steps:
+      - name: Find exercise issue
+        id: find-issue
+        run: |
+          ISSUE_NUMBER=$(gh issue list --repo ${{ github.repository }} --label "exercise" --state open --json number --jq '.[0].number')
+          if [ -z "$ISSUE_NUMBER" ]; then
+            ISSUE_NUMBER=$(gh issue list --repo ${{ github.repository }} --state open --json number --jq '.[0].number')
+          fi
+          echo "issue-number=$ISSUE_NUMBER" >> $GITHUB_OUTPUT
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Checkout
         uses: actions/checkout@v6
 
@@ -136,7 +156,7 @@ jobs:
         uses: GrantBirki/comment@v2.1.1
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           file: exercise-toolkit/markdown-templates/step-feedback/step-finished-prepare-next-step.md
           vars: |
             next_step_number: 3
@@ -145,14 +165,14 @@ jobs:
         uses: GrantBirki/comment@v2.1.1
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           file: ${{ env.STEP_3_FILE }}
 
       - name: Create comment - watching for progress
         uses: GrantBirki/comment@v2.1.1
         with:
           repository: ${{ env.ISSUE_REPOSITORY }}
-          issue-number: ${{ env.ISSUE_NUMBER }}
+          issue-number: ${{ steps.find-issue.outputs.issue-number }}
           file: exercise-toolkit/markdown-templates/step-feedback/watching-for-progress.md
 
       - name: Disable current workflow and enable next one

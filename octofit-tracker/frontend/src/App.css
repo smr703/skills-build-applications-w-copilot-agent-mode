@@ -1,0 +1,82 @@
+.app-shell {
+  min-height: 100vh;
+  padding: 32px;
+}
+
+.app-header {
+  align-items: end;
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding-bottom: 24px;
+}
+
+.app-header h1,
+.section-heading h1 {
+  margin: 0;
+}
+
+.eyebrow {
+  color: var(--accent);
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+  text-transform: uppercase;
+}
+
+.data-view {
+  text-align: left;
+}
+
+.section-heading {
+  margin-bottom: 24px;
+}
+
+.data-card {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  box-shadow: var(--shadow);
+  padding: 20px;
+}
+
+.data-card h2 {
+  text-transform: capitalize;
+}
+
+.metric {
+  color: var(--accent);
+  display: inline-block;
+  font-weight: 700;
+  margin-top: 16px;
+}
+
+.leaderboard-row {
+  align-items: center;
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 72px 1fr auto;
+}
+
+.rank {
+  color: var(--accent);
+  font-weight: 800;
+}
+
+@media (max-width: 768px) {
+  .app-shell {
+    padding: 20px;
+  }
+
+  .app-header {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .app-header .nav {
+    width: 100%;
+  }
+}
