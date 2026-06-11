@@ -98,7 +98,7 @@ function App() {
               </a>
             </li>
             <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
+              <a href="https://bsky.app/profile/vite.dev" target="_blank" rel="noopener noreferrer">
                 <svg
                   className="button-icon"
                   role="presentation"
